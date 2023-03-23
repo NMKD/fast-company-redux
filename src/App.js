@@ -10,15 +10,16 @@ import AuthProvider from "./hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { loadQualitiesList } from "./store/qualities";
 import { loadProfessionsList } from "./store/profession";
+import { loadUsersList } from "./store/user";
 
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(loadUsersList());
         dispatch(loadQualitiesList());
-    }, []);
-    useEffect(() => {
         dispatch(loadProfessionsList());
     }, []);
+
     return (
         <div>
             <AuthProvider>

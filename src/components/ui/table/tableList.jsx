@@ -21,7 +21,7 @@ const TableList = ({ users, onToogle, currentSort, onSort }) => {
         },
         profession: {
             name: "Профессия",
-            component: (user) => <Profession id={user.profession} />
+            component: (user) => <Profession name={user.profession} />
         },
         completedMeetings: {
             path: "completedMeetings",

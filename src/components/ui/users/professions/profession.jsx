@@ -7,10 +7,15 @@ import {
 } from "../../../../store/profession";
 
 const Profession = ({ id }) => {
+    console.log(id);
     const data = useSelector(getProfession(id));
     const loading = useSelector(getProfessionsLoading());
 
-    return <p>{loading ? "loading..." : data.name}</p>;
+    if (loading || !id) {
+        return <span>loading... </span>;
+    }
+
+    return <p>{data.name}</p>;
 };
 
 Profession.propTypes = {

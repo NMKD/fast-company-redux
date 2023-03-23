@@ -18,6 +18,7 @@ const usersSlice = createSlice({
         dataStatus: false,
         currentUser: null
     },
+    //
     reducers: {
         usersRequested(state) {
             state.isLoading = true;

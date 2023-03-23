@@ -13,6 +13,7 @@ import {
     getProfessionsState
 } from "../../../store/profession";
 import { signUp } from "../../../store/user";
+import { toast } from "react-toastify";
 
 const SignUpForm = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const SignUpForm = () => {
     const stateQualities = useSelector(getQualitiesState());
     const isLoadingQual = useSelector(getLoading());
     const isLoadingProf = useSelector(getProfessionsLoading());
-    console.log(stateQualities);
+
     const qualitiesList =
         !isLoadingProf &&
         stateQualities.map((item) => ({
@@ -59,6 +60,7 @@ const SignUpForm = () => {
                 )[0]._id
             })
         );
+        toast.success("Пользователь зарегистрирован");
     };
 
     const handleChangeData = (target) => {

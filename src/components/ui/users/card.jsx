@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Avatar from "./avatar";
-import { useAuthContext } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../../store/user";
 
 const Card = ({ user, pathName }) => {
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
     return (
         <>
             <div className="card mb-3">

@@ -17,6 +17,7 @@ const User = ({ userId }) => {
     const { edit } = useParams();
     const user = useSelector(getUser(userId));
 
+    // UPDATE!!!
     const { updateCurrentUser, stateUserCurrent } = useAuthContext();
     const professions = useSelector(getProfessionsState());
     const stateQualities = useSelector(getQualitiesState());

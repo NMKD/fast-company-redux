@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { getProfession } from "../../../../store/profession";
 
 const Profession = ({ id }) => {
-    console.log(id);
     const data = useSelector(getProfession(id));
 
     if (!id) {

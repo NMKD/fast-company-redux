@@ -4,6 +4,7 @@ import authService from "../service/auth.service";
 import localStorageService from "../service/localstorage.service";
 import userService from "../service/user.service";
 import { randomInt } from "../utils/randomInt";
+import history from "../utils/history";
 
 const usersSlice = createSlice({
     name: "user",
@@ -40,9 +41,22 @@ const usersSlice = createSlice({
         },
         authRequestSuccess(state, { payload }) {
             state.auth = payload;
+            state.isLogIn = true;
             state.isLoading = false;
         },
         authRequestFailed(state, { payload }) {
+            state.error = payload;
+            state.isLoading = false;
+        },
+        logInRequested(state) {
+            state.isLoading = true;
+        },
+        logInRequestSuccess(state, { payload }) {
+            state.auth = payload;
+            state.isLogIn = true;
+            state.isLoading = false;
+        },
+        logInRequestFailed(state, { payload }) {
             state.error = payload;
             state.isLoading = false;
         }
@@ -57,7 +71,10 @@ const {
     toogleBookmark,
     authRequestSuccess,
     authRequested,
-    authRequestFailed
+    authRequestFailed,
+    logInRequestFailed,
+    logInRequested,
+    logInRequestSuccess
 } = usersSlice.actions;
 
 export const loadUsersList = () => async (dispatch, getState) => {
@@ -85,9 +102,23 @@ const createUser = (payload) => async (dispatch, getState) => {
     try {
         const { data } = await userService.create(payload);
         dispatch(authRequestSuccess(data.content));
+        history.push("/users");
     } catch (e) {
         dispatch(authRequestFailed("Ошибка при загрузки данных - 'users'"));
         console.error(e);
+    }
+};
+
+const getAuthUser = (id) => async (dispatch, getState) => {
+    try {
+        const { data } = await userService.getAuth(id);
+        dispatch(logInRequestSuccess(data.content));
+        history.push("/users");
+    } catch (e) {
+        if (e.response.statusText === "Unauthorized") {
+            dispatch(logInRequestFailed("Пожалуйста пройдите регистрацию"));
+        }
+        console.error(e.response);
     }
 };
 
@@ -105,7 +136,6 @@ export const signUp =
                     password,
                     completedMeetings: randomInt(0, 100),
                     rate: randomInt(1, 5),
-                    isLogIn: true,
                     ...rest
                 })
             );
@@ -119,9 +149,30 @@ export const signUp =
         }
     };
 
+export const signIn =
+    ({ email, password }) =>
+    async (dispatch, getState) => {
+        dispatch(logInRequested());
+        try {
+            const { data } = await authService.login({ email, password });
+            localStorageService.setToken(data);
+            dispatch(getAuthUser(data.localId));
+        } catch (e) {
+            const err = e.response.data.error;
+            if (err.code === 400 && err.message === "EMAIL_EXISTS") {
+                dispatch(logInRequestFailed("Email введен неверно"));
+            } else if (err.code === 400 && err.message === "INVALID_PASSWORD") {
+                dispatch(logInRequestFailed("Пароль введен неверно"));
+            } else {
+                console.error(e.response);
+            }
+        }
+    };
+
 export const getUsersState = () => (state) => state.user.entities;
 export const getUsersLoading = () => (state) => state.user.isLoading;
 export const getUsersError = () => (state) => state.user.error;
-export const getAuth = () => (state) => state.user.auth;
+export const getCurrentUser = () => (state) => state.user.auth;
+export const getIsLoggedIn = () => (state) => state.user.isLogIn;
 
 export default usersReducer;

@@ -4,6 +4,7 @@ import { useAuthContext } from "../../../../hooks/useAuth";
 
 const NavProfile = () => {
     const history = useHistory();
+    // UPDATE!!!
     const { stateUserCurrent, onSignOut } = useAuthContext();
     const [isOpen, setOpen] = useState(false);
     const toogleMenu = () => {

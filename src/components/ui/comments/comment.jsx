@@ -2,9 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Avatar from "../users/avatar";
 import { formstDate } from "../../../utils/formatDate";
-import { useAuthContext } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
-import { getUser } from "../../../store/user";
+import { getCurrentUser, getUser } from "../../../store/user";
 
 const Comment = ({
     content,
@@ -14,7 +13,7 @@ const Comment = ({
     onRemove
 }) => {
     const user = useSelector(getUser(userId));
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
 
     return (
         <div className="bg-light card-body  mb-3">

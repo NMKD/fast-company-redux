@@ -13,6 +13,12 @@ const authService = {
             email,
             password,
             returnSecureToken: true
+        }),
+    login: async ({ email, password }) =>
+        await httpAuth.post(`accounts:signInWithPassword`, {
+            email,
+            password,
+            returnSecureToken: true
         })
 };
 

@@ -4,10 +4,11 @@ import AddCommentForm from "./addCommentForm";
 import CommentList from "./commentList";
 import { orderBy } from "lodash";
 import { useCommentsContext } from "../../../hooks/useComment";
-import { useAuthContext } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../../store/user";
 
 const Comments = ({ paramId }) => {
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
     const { stateComments, onSubmitForm, onRemoveComment } =
         useCommentsContext();
 

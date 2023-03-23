@@ -16,6 +16,7 @@ import { getProfessionsState } from "../../../store/profession";
 import {
     getUsersLoading,
     getUsersState,
+    loadUsersList,
     onToogleBookmark
 } from "../../../store/user.js";
 
@@ -54,7 +55,6 @@ const UsersList = () => {
 
     // Pagination/ отображение пользователей / фильтр
     const usersCrop = paginate(sortedUsers, currentPage, pageSize);
-    console.log(usersCrop);
 
     // Search
     const handleChangeSearch = ({ target }) => {
@@ -90,51 +90,59 @@ const UsersList = () => {
         setCurrentPage(1);
     }, [selectedProf]);
 
+    useEffect(() => {
+        if (users === null) {
+            dispatch(loadUsersList());
+        }
+    });
+
     if (isLoadingUsers && users === null) {
         return <span>loading...</span>;
     }
 
     return (
         <>
-            <div className="container pt-4">
-                <div className="row">
-                    <div className="col col-sm-12 col-lg-2">
-                        <>
-                            <GroupList
-                                selectedItem={selectedProf}
-                                items={professions}
-                                onFilter={handleFilterSelect}
+            {users !== null && (
+                <div className="container pt-4">
+                    <div className="row">
+                        <div className="col col-sm-12 col-lg-2">
+                            <>
+                                <GroupList
+                                    selectedItem={selectedProf}
+                                    items={professions}
+                                    onFilter={handleFilterSelect}
+                                />
+                                <button
+                                    className="btn btn-danger mt-2 mb-2"
+                                    onClick={handleClearFilterSelect}
+                                >
+                                    Очистить
+                                </button>
+                            </>
+                        </div>
+                        <div className="col col-sm-12 col-lg-8">
+                            <SearchStatus length={count} />
+                            <SearchInput
+                                value={searchInput}
+                                onChange={handleChangeSearch}
                             />
-                            <button
-                                className="btn btn-danger mt-2 mb-2"
-                                onClick={handleClearFilterSelect}
-                            >
-                                Очистить
-                            </button>
-                        </>
-                    </div>
-                    <div className="col col-sm-12 col-lg-8">
-                        <SearchStatus length={count} />
-                        <SearchInput
-                            value={searchInput}
-                            onChange={handleChangeSearch}
-                        />
-                        {count > 0 && (
-                            <TableList
-                                users={usersCrop}
-                                onToogle={handleToogleBookMark}
-                                onSort={handleSortTable}
-                                currentSort={sortBy}
+                            {count > 0 && (
+                                <TableList
+                                    users={usersCrop}
+                                    onToogle={handleToogleBookMark}
+                                    onSort={handleSortTable}
+                                    currentSort={sortBy}
+                                />
+                            )}
+                            <Pagination
+                                itemsCount={count}
+                                {...{ pageSize, currentPage }}
+                                onPageChange={handlePageChange}
                             />
-                        )}
-                        <Pagination
-                            itemsCount={count}
-                            {...{ pageSize, currentPage }}
-                            onPageChange={handlePageChange}
-                        />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </>
     );
 };

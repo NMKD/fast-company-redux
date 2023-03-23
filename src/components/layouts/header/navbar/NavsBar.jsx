@@ -1,10 +1,11 @@
 import React from "react";
-import { useAuthContext } from "../../../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import NavProfile from "../../../ui/users/profile/navProfile";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../../../store/user";
 
 const NavsBar = () => {
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
     return (
         <>
             <nav className="navb navbar navbar-expand-lg navbar-light bg-light mb-5">

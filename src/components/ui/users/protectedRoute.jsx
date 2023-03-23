@@ -1,11 +1,12 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import { useAuthContext } from "../../../hooks/useAuth";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../../store/user";
 
 const ProtectedRoute = ({ component: Component, children, ...rest }) => {
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
     return (
         <Route
             {...rest}

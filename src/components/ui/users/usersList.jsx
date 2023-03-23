@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchStatus from "../table/heading/searchStatus";
 import Pagination from "../table/pagination/pagination";
 import paginate from "../../../utils/paginate";
@@ -7,18 +8,22 @@ import GroupList from "./professions/groupList";
 import TableList from "../table/tableList";
 import SearchInput from "../form/fields/searchInput";
 import _ from "lodash";
-import { useUserContext } from "../../../hooks/useUsers";
 import {
     includesToString,
     toFilterProfession
 } from "../../../utils/getFilterData";
-import { useSelector } from "react-redux";
 import { getProfessionsState } from "../../../store/profession";
+import {
+    getUsersLoading,
+    getUsersState,
+    onToogleBookmark
+} from "../../../store/user.js";
 
 const UsersList = () => {
-    const { users, toogleBookmark } = useUserContext();
+    const users = useSelector(getUsersState());
+    const isLoadingUsers = useSelector(getUsersLoading());
     const professions = useSelector(getProfessionsState());
-
+    const dispatch = useDispatch();
     // professions/api/filter
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({
@@ -49,6 +54,7 @@ const UsersList = () => {
 
     // Pagination/ отображение пользователей / фильтр
     const usersCrop = paginate(sortedUsers, currentPage, pageSize);
+    console.log(usersCrop);
 
     // Search
     const handleChangeSearch = ({ target }) => {
@@ -77,15 +83,15 @@ const UsersList = () => {
     };
 
     const handleToogleBookMark = (id) => {
-        toogleBookmark(id);
+        dispatch(onToogleBookmark(id));
     };
 
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    if (users.length === 0) {
-        return <h2>Loading...</h2>;
+    if (isLoadingUsers && users === null) {
+        return <span>loading...</span>;
     }
 
     return (

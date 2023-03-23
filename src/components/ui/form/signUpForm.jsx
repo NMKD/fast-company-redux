@@ -6,18 +6,16 @@ import MultiSelectField from "./fields/multiSelectField";
 import { validate } from "../../../utils/validate";
 import { validationSchema } from "../../../utils/validationSchema";
 import CheckBoxField from "./fields/checkBoxField";
-import { useAuthContext } from "../../../hooks/useAuth";
-import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLoading, getQualitiesState } from "../../../store/qualities";
 import {
     getProfessionsLoading,
     getProfessionsState
 } from "../../../store/profession";
+import { signUp } from "../../../store/user";
 
 const SignUpForm = () => {
-    const history = useHistory();
-    const { signUp } = useAuthContext();
+    const dispatch = useDispatch();
     const [data, setData] = useState({
         name: "",
         email: "",
@@ -48,16 +46,19 @@ const SignUpForm = () => {
         { name: "Other", value: "other" }
     ];
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        await signUp({
-            ...data,
-            qualities: data.qualities.map((item) => item.value),
-            profession: professions.filter((item) =>
-                item.name.toLowerCase().includes(data.profession.toLowerCase())
-            )[0]._id
-        });
-        history.push("/");
+        dispatch(
+            signUp({
+                ...data,
+                qualities: data.qualities.map((item) => item.value),
+                profession: professions.filter((item) =>
+                    item.name
+                        .toLowerCase()
+                        .includes(data.profession.toLowerCase())
+                )[0]._id
+            })
+        );
     };
 
     const handleChangeData = (target) => {

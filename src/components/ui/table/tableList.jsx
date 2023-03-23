@@ -21,7 +21,7 @@ const TableList = ({ users, onToogle, currentSort, onSort }) => {
         },
         profession: {
             name: "Профессия",
-            component: (user) => <Profession name={user.profession} />
+            component: (user) => <Profession id={user.profession} />
         },
         completedMeetings: {
             path: "completedMeetings",
@@ -42,7 +42,7 @@ const TableList = ({ users, onToogle, currentSort, onSort }) => {
     };
     return (
         <>
-            <Table {...{ currentSort, onSort, columns, data: users }} />
+            <Table {...{ currentSort, onSort, columns, users }} />
         </>
     );
 };

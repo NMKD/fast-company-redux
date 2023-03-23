@@ -6,16 +6,17 @@ import Card from "./card";
 import QualitieList from "./qualities/qualitieList";
 import CompletedMeetings from "./completedMeetings";
 import Comments from "../comments/comments";
-import { useUserContext } from "../../../hooks/useUsers";
 import CommentsProvider from "../../../hooks/useComment";
 import { useAuthContext } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualitiesState } from "../../../store/qualities";
 import { getProfessionsState } from "../../../store/profession";
+import { getUser } from "../../../store/user";
 
 const User = ({ userId }) => {
     const { edit } = useParams();
-    const { getUser } = useUserContext();
+    const user = useSelector(getUser(userId));
+
     const { updateCurrentUser, stateUserCurrent } = useAuthContext();
     const professions = useSelector(getProfessionsState());
     const stateQualities = useSelector(getQualitiesState());
@@ -23,7 +24,7 @@ const User = ({ userId }) => {
         label: item.name,
         value: item._id
     }));
-    const user = getUser(userId);
+
     const [form, setForm] = useState({
         ...stateUserCurrent
     });

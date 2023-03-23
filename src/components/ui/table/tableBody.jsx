@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-const TableBody = ({ data, columns }) => {
+const TableBody = ({ users, columns }) => {
     const renderContent = (item, col) => {
         const component = columns[col].component;
         if (component && typeof component === "function") {
@@ -13,7 +13,7 @@ const TableBody = ({ data, columns }) => {
     return (
         <>
             <tbody>
-                {data.map((item) => (
+                {users.map((item) => (
                     <tr key={item._id}>
                         {Object.keys(columns).map((col) => (
                             <td key={col}>{renderContent(item, col)}</td>
@@ -26,7 +26,7 @@ const TableBody = ({ data, columns }) => {
 };
 
 TableBody.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     columns: PropTypes.object.isRequired
 };
 

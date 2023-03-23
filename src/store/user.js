@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 /* eslint-disable indent */
 import { createSlice } from "@reduxjs/toolkit";
 import authService from "../service/auth.service";
@@ -13,7 +14,8 @@ const usersSlice = createSlice({
         isLoading: true,
         error: null,
         auth: null,
-        isLogIn: false
+        isLogIn: false,
+        dataStatus: false
     },
     reducers: {
         usersRequested(state) {
@@ -21,6 +23,7 @@ const usersSlice = createSlice({
         },
         usersReceved(state, { payload }) {
             state.entities = payload;
+            state.dataStatus = true;
             state.isLoading = false;
         },
         usersRequestFailed(state, { payload }) {
@@ -109,17 +112,22 @@ const createUser = (payload) => async (dispatch, getState) => {
     }
 };
 
-const getAuthUser = (id) => async (dispatch, getState) => {
+export const getAuthUser = (id) => async (dispatch, getState) => {
     try {
         const { data } = await userService.getAuth(id);
         dispatch(logInRequestSuccess(data.content));
-        history.push("/users");
+        history.push("/");
     } catch (e) {
         if (e.response.statusText === "Unauthorized") {
             dispatch(logInRequestFailed("Пожалуйста пройдите регистрацию"));
         }
         console.error(e.response);
     }
+};
+
+export const onSignOut = () => (dispatch, getState) => {
+    localStorageService.removeUserData();
+    history.push("/");
 };
 
 export const signUp =
@@ -170,9 +178,11 @@ export const signIn =
     };
 
 export const getUsersState = () => (state) => state.user.entities;
-export const getUsersLoading = () => (state) => state.user.isLoading;
 export const getUsersError = () => (state) => state.user.error;
+export const getUsersLoading = () => (state) => state.user.isLoading;
+export const getCurrentUserId = () => (state) => state.user.auth._id;
 export const getCurrentUser = () => (state) => state.user.auth;
 export const getIsLoggedIn = () => (state) => state.user.isLogIn;
+export const getDataStatus = () => (state) => state.user.dataStatus;
 
 export default usersReducer;

@@ -16,7 +16,6 @@ import { getProfessionsState } from "../../../store/profession";
 import {
     getUsersLoading,
     getUsersState,
-    loadUsersList,
     onToogleBookmark
 } from "../../../store/user.js";
 
@@ -89,12 +88,6 @@ const UsersList = () => {
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
-
-    useEffect(() => {
-        if (users === null) {
-            dispatch(loadUsersList());
-        }
-    });
 
     if (isLoadingUsers && users === null) {
         return <span>loading...</span>;

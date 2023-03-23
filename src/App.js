@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Users from "./components/pages/users";
 import Main from "./components/pages/main";
@@ -7,31 +7,22 @@ import NavsBar from "./components/layouts/header/navbar/NavsBar";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AuthProvider from "./hooks/useAuth";
-import { useDispatch } from "react-redux";
-import { loadQualitiesList } from "./store/qualities";
-import { loadProfessionsList } from "./store/profession";
-import { loadUsersList } from "./store/user";
+
+import AppLoader from "./components/HOC/appLoader";
 
 const App = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(loadUsersList());
-        dispatch(loadQualitiesList());
-        dispatch(loadProfessionsList());
-    }, []);
-
     return (
-        <div>
-            <AuthProvider>
-                <NavsBar />
+        <AuthProvider>
+            <NavsBar />
+            <AppLoader>
                 <Switch>
                     <Route exact path="/" component={Main} />
                     <Route path="/login/:type" component={Login} />
                     <Route path="/users/:id?/:edit?" component={Users} />
                 </Switch>
-            </AuthProvider>
+            </AppLoader>
             <ToastContainer />
-        </div>
+        </AuthProvider>
     );
 };
 

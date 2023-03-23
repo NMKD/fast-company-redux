@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 import commentService from "../service/coment.service";
 import { toast } from "react-toastify";
-import { useAuthContext } from "./useAuth";
+
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../store/user";
 
 const CommentsContext = React.createContext();
 
@@ -14,7 +16,7 @@ const CommentsProvider = ({ children }) => {
     const { id } = useParams();
     const [stateComments, setStateComments] = useState();
     const [isLoading, setLoading] = useState(true);
-    const { stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
 
     async function getSortedComment(id) {
         try {

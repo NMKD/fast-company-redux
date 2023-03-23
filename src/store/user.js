@@ -15,7 +15,8 @@ const usersSlice = createSlice({
         error: null,
         auth: null,
         isLogIn: false,
-        dataStatus: false
+        dataStatus: false,
+        currentUser: null
     },
     reducers: {
         usersRequested(state) {
@@ -43,7 +44,8 @@ const usersSlice = createSlice({
             state.isLoading = true;
         },
         authRequestSuccess(state, { payload }) {
-            state.auth = payload;
+            state.currentUser = payload;
+            state.auth = payload._id;
             state.isLogIn = true;
             state.isLoading = false;
         },
@@ -55,12 +57,26 @@ const usersSlice = createSlice({
             state.isLoading = true;
         },
         logInRequestSuccess(state, { payload }) {
-            state.auth = payload;
+            state.currentUser = payload;
+            state.auth = payload._id;
             state.isLogIn = true;
             state.isLoading = false;
         },
         logInRequestFailed(state, { payload }) {
             state.error = payload;
+            state.isLoading = false;
+        },
+        userLoggedOut(state) {
+            state.entities = null;
+            state.isLoggedIn = false;
+            state.auth = null;
+            state.currentUser = null;
+            state.dataLoaded = false;
+        },
+        userUpdatedRequest(state, { payload }) {
+            state.currentUser = payload;
+            state.auth = payload._id;
+            state.isLogIn = true;
             state.isLoading = false;
         }
     }
@@ -77,7 +93,9 @@ const {
     authRequestFailed,
     logInRequestFailed,
     logInRequested,
-    logInRequestSuccess
+    logInRequestSuccess,
+    userLoggedOut,
+    userUpdatedRequest
 } = usersSlice.actions;
 
 export const loadUsersList = () => async (dispatch, getState) => {
@@ -127,6 +145,7 @@ export const getAuthUser = (id) => async (dispatch, getState) => {
 
 export const onSignOut = () => (dispatch, getState) => {
     localStorageService.removeUserData();
+    dispatch(userLoggedOut());
     history.push("/");
 };
 
@@ -177,11 +196,22 @@ export const signIn =
         }
     };
 
+export const updateCurrentUser = (payload) => async (dispatch, getState) => {
+    dispatch(logInRequested());
+    try {
+        const { data } = await userService.update(payload);
+        dispatch(userUpdatedRequest(data.content));
+    } catch (e) {
+        console.error(e.response);
+        console.log("Ошибка при отправлении формы, попробуйте позже");
+    }
+};
+
 export const getUsersState = () => (state) => state.user.entities;
 export const getUsersError = () => (state) => state.user.error;
 export const getUsersLoading = () => (state) => state.user.isLoading;
-export const getCurrentUserId = () => (state) => state.user.auth._id;
-export const getCurrentUser = () => (state) => state.user.auth;
+export const getCurrentUserId = () => (state) => state.user.auth;
+export const getCurrentUser = () => (state) => state.user.currentUser;
 export const getIsLoggedIn = () => (state) => state.user.isLogIn;
 export const getDataStatus = () => (state) => state.user.dataStatus;
 

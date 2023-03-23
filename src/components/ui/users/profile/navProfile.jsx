@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { useAuthContext } from "../../../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getCurrentUser, onSignOut } from "../../../../store/user";
 
 const NavProfile = () => {
-    const history = useHistory();
-    // UPDATE!!!
-    const { stateUserCurrent, onSignOut } = useAuthContext();
+    const dispatch = useDispatch();
+    const stateUserCurrent = useSelector(getCurrentUser());
     const [isOpen, setOpen] = useState(false);
     const toogleMenu = () => {
         setOpen((prevState) => !prevState);
     };
     const handleSignOut = () => {
-        onSignOut();
-        history.push("/");
+        dispatch(onSignOut());
     };
 
     return (

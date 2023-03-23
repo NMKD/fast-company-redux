@@ -7,18 +7,20 @@ import QualitieList from "./qualities/qualitieList";
 import CompletedMeetings from "./completedMeetings";
 import Comments from "../comments/comments";
 import CommentsProvider from "../../../hooks/useComment";
-import { useAuthContext } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualitiesState } from "../../../store/qualities";
 import { getProfessionsState } from "../../../store/profession";
-import { getUser } from "../../../store/user";
+import {
+    getCurrentUser,
+    getUser,
+    updateCurrentUser
+} from "../../../store/user";
 
 const User = ({ userId }) => {
     const { edit } = useParams();
+    const dispatch = useDispatch();
     const user = useSelector(getUser(userId));
-
-    // UPDATE!!!
-    const { updateCurrentUser, stateUserCurrent } = useAuthContext();
+    const stateUserCurrent = useSelector(getCurrentUser());
     const professions = useSelector(getProfessionsState());
     const stateQualities = useSelector(getQualitiesState());
     const qualitiesList = stateQualities.map((item) => ({
@@ -47,12 +49,14 @@ const User = ({ userId }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await updateCurrentUser({
-            ...form,
-            qualities:
-                form.qualities.map((item) => item.value) || form.qualities,
-            profession: getProfession(user.profession) || form.profession
-        });
+        dispatch(
+            updateCurrentUser({
+                ...form,
+                qualities:
+                    form.qualities.map((item) => item.value) || form.qualities,
+                profession: getProfession(user.profession) || form.profession
+            })
+        );
         history.push(`/users/${user._id}`);
     };
 

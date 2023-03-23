@@ -6,13 +6,12 @@ import Login from "./components/pages/login";
 import NavsBar from "./components/layouts/header/navbar/NavsBar";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import AuthProvider from "./hooks/useAuth";
 
 import AppLoader from "./components/HOC/appLoader";
 
 const App = () => {
     return (
-        <AuthProvider>
+        <>
             <NavsBar />
             <AppLoader>
                 <Switch>
@@ -20,9 +19,9 @@ const App = () => {
                     <Route path="/login/:type" component={Login} />
                     <Route path="/users/:id?/:edit?" component={Users} />
                 </Switch>
+                <ToastContainer />
             </AppLoader>
-            <ToastContainer />
-        </AuthProvider>
+        </>
     );
 };
 

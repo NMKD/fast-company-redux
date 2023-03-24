@@ -10,7 +10,7 @@ import history from "../utils/history";
 const initialState = localStorageService.getAccessToken()
     ? {
           entities: null,
-          isLoading: true,
+          isLoading: false,
           error: null,
           auth: { userId: localStorageService.getUserId() },
           isLoggedIn: true,
@@ -170,7 +170,7 @@ export const signIn =
             const { data } = await authService.login({ email, password });
             localStorageService.setToken(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
-            history.push("/users");
+            history.push("/");
         } catch (e) {
             const err = e.response.data.error;
             if (err.code === 400 && err.message === "EMAIL_EXISTS") {

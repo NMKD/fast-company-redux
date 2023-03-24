@@ -31,7 +31,7 @@ const FormUser = ({
 
     return (
         <>
-            {user ? (
+            {user !== null ? (
                 <form className="needs-validation" onSubmit={onSubmit}>
                     <TextField
                         name="name"

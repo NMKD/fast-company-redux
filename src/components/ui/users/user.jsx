@@ -69,7 +69,7 @@ const User = ({ userId }) => {
 
     const { url } = useRouteMatch();
 
-    if (!user) {
+    if (user === null || user === undefined) {
         return (
             <div className="container">
                 <div className="row">

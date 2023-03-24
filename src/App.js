@@ -4,10 +4,11 @@ import Users from "./components/pages/users";
 import Main from "./components/pages/main";
 import Login from "./components/pages/login";
 import NavsBar from "./components/layouts/header/navbar/NavsBar";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import AppLoader from "./components/HOC/appLoader";
+import ProtectedRoute from "./components/ui/users/protectedRoute";
 
 const App = () => {
     return (
@@ -15,9 +16,13 @@ const App = () => {
             <NavsBar />
             <AppLoader>
                 <Switch>
-                    <Route exact path="/" component={Main} />
+                    <ProtectedRoute
+                        path="/users/:id?/:edit?"
+                        component={Users}
+                    />
                     <Route path="/login/:type" component={Login} />
-                    <Route path="/users/:id?/:edit?" component={Users} />
+                    <Route exact path="/" component={Main} />
+                    <Redirect to="/" />
                 </Switch>
                 <ToastContainer />
             </AppLoader>

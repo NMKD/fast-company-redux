@@ -8,10 +8,13 @@ const Users = () => {
     const { id } = useParams();
     return (
         <>
-            <UsersLoader>
-                {" "}
-                {id ? <User userId={id} /> : <UsersList />}
-            </UsersLoader>
+            {id ? (
+                <User userId={id} />
+            ) : (
+                <UsersLoader>
+                    <UsersList />
+                </UsersLoader>
+            )}
         </>
     );
 };

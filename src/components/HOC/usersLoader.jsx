@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataStatus, getIsLoggedIn, loadUsersList } from "../../store/user";
 
 const UsersLoader = ({ children }) => {
-    const dataStatus = useSelector(getDataStatus());
+    const dataLoaded = useSelector(getDataStatus());
     const isLoggedIn = useSelector(getIsLoggedIn());
+
     const dispatch = useDispatch();
     useEffect(() => {
-        if (!dataStatus) {
+        if (!dataLoaded) {
+            console.log(dataLoaded);
             dispatch(loadUsersList());
         }
     }, []);

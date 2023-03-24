@@ -32,10 +32,11 @@ const usersSlice = createSlice({
     reducers: {
         usersRequested(state) {
             state.isLoading = true;
+            state.dataLoaded = false;
         },
         usersReceved(state, { payload }) {
             state.entities = payload;
-            state.dataStatus = true;
+            state.dataLoaded = true;
             state.isLoading = false;
         },
         usersRequestFailed(state, { payload }) {
@@ -68,7 +69,6 @@ const usersSlice = createSlice({
             state.entities = null;
             state.isLoggedIn = false;
             state.auth = null;
-            state.dataLoaded = false;
         },
         userUpdatedSuccess(state, { payload }) {
             if (!Array.isArray(state.entities)) {

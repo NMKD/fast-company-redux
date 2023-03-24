@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getCurrentUser, onSignOut } from "../../../../store/user";
+import {
+    getCurrentUser,
+    getUsersLoading,
+    onSignOut
+} from "../../../../store/user";
 
 const NavProfile = () => {
     const dispatch = useDispatch();
     const stateUserCurrent = useSelector(getCurrentUser());
+    const isLoggedIn = useSelector(getUsersLoading());
+
     const [isOpen, setOpen] = useState(false);
     const toogleMenu = () => {
         setOpen((prevState) => !prevState);
@@ -13,6 +19,10 @@ const NavProfile = () => {
     const handleSignOut = () => {
         dispatch(onSignOut());
     };
+
+    if (!isLoggedIn) {
+        return <span>Loading...</span>;
+    }
 
     return (
         <div className="dropdown" onClick={toogleMenu}>

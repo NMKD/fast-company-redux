@@ -206,7 +206,7 @@ export const getUser = (id) => (state) =>
 export const getCurrentUserId = () => (state) => state.user.auth.userId;
 export const getCurrentUser = () => (state) => {
     return state.user.entities
-        ? state.user.entities.find((u) => u._id === state.user.auth.userId)
+        ? state.user.entities.find((u) => u._id === state.user.auth?.userId)
         : null;
 };
 export const getIsLoggedIn = () => (state) => state.user.isLoggedIn;

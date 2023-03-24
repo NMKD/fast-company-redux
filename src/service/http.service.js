@@ -3,7 +3,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import configJson from "../config.json";
-import { httpAuth } from "../hooks/useAuth";
+import { httpAuth } from "./auth.service";
+
 import localStorageService from "./localstorage.service";
 
 const expiresDate = localStorageService.getExpDate();

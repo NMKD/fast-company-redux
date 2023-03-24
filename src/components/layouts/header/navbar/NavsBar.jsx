@@ -13,16 +13,18 @@ const NavsBar = () => {
                 <div className="container-fluid d-flex justify-content-between">
                     <div>
                         {isLoggedIn && (
-                            <ul className="nav">
-                                <li className="nav-item m-2">
-                                    <Link className="nav-link" to="/users">
-                                        Users
-                                    </Link>
-                                </li>
+                            <>
+                                <ul className="nav">
+                                    <li className="nav-item m-2">
+                                        <Link className="nav-link" to="/users">
+                                            Users
+                                        </Link>
+                                    </li>
+                                </ul>
                                 <div>
                                     <NavProfile />
                                 </div>
-                            </ul>
+                            </>
                         )}
                     </div>
                     <div>

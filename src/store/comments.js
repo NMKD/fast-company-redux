@@ -38,7 +38,7 @@ export const loadCommentsList = (userId) => async (dispatch) => {
     }
 };
 
-export const getProfession = (id) => (state) =>
+export const getComment = (id) => (state) =>
     state.profession.entities.find((item) => item._id === id);
 
 export const getcommentsState = () => (state) => state.profession.entities;

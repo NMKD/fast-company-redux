@@ -49,14 +49,6 @@ const User = ({ userId }) => {
         return includesToString(professions, name)[0]._id;
     };
 
-    // const getQualities = (data) => {
-    //     if (data.find((item) => typeof item === "string")) {
-    //         return data;
-    //     } else {
-    //         return data.map((item) => item.value);
-    //     }
-    // };
-
     const handleChange = (target) => {
         setForm((prevState) => ({
             ...prevState,

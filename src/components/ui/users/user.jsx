@@ -7,7 +7,6 @@ import Card from "./card";
 import QualitieList from "./qualities/qualitieList";
 import CompletedMeetings from "./completedMeetings";
 import Comments from "../comments/comments";
-import CommentsProvider from "../../../hooks/useComment";
 import { useDispatch, useSelector } from "react-redux";
 import { getQualitiesState } from "../../../store/qualities";
 import { getProfessionsState } from "../../../store/profession";
@@ -119,9 +118,7 @@ const User = ({ userId }) => {
                                     />
                                 </div>
                                 <div className="col-12 col-md-8 col-lg-8">
-                                    <CommentsProvider>
-                                        <Comments {...{ paramId: userId }} />
-                                    </CommentsProvider>
+                                    <Comments {...{ paramId: userId }} />
                                 </div>
                             </>
                         )}

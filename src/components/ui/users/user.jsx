@@ -50,8 +50,7 @@ const User = ({ userId }) => {
     };
 
     const getQualities = (data) => {
-        console.log(data);
-        if (data.filter((item) => typeof item === "string")) {
+        if (data.find((item) => typeof item === "string")) {
             return data;
         } else {
             return data.map((item) => item.value);
@@ -67,20 +66,10 @@ const User = ({ userId }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log({
-            ...form,
-            qualities: getQualities(form.qualities),
-            profession: getProfession(form.profession)
-        });
         dispatch(
             updateCurrentUser({
                 ...form,
-                qualities: form.qualities.filter(
-                    (item) => typeof item === "string"
-                )
-                    ? form.qualities
-                    : form.qualities.map((item) => item.value),
+                qualities: getQualities(form.qualities),
                 profession: getProfession(form.profession)
             })
         );

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import TextField from "./fields/textField";
 import CheckBoxField from "./fields/checkBoxField";
 import { yupValidationSingIn } from "../../../utils/validationSchema";
-import { useDispatch } from "react-redux";
-import { signIn } from "../../../store/user";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, signIn } from "../../../store/user";
 
 const SingInForm = () => {
     const dispatch = useDispatch();
-
+    const sigInError = useSelector(getAuthErrors());
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -53,6 +53,7 @@ const SingInForm = () => {
                 onChange={handleChangeData}
                 error={errors.password}
             />
+            {sigInError && <p className="text-danger my-2">{sigInError}</p>}
 
             <button
                 className="btn btn-success mt-3 mb-3"

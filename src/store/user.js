@@ -6,6 +6,7 @@ import localStorageService from "../service/localstorage.service";
 import userService from "../service/user.service";
 import { randomInt } from "../utils/randomInt";
 import history from "../utils/history";
+import generateAuthError from "../utils/generateAuthError";
 
 const initialState = localStorageService.getAccessToken()
     ? {
@@ -52,6 +53,7 @@ const usersSlice = createSlice({
         },
         authRequested(state) {
             state.isLoading = true;
+            state.error = null;
         },
         authRequestSuccess(state, { payload }) {
             state.auth = payload;
@@ -150,11 +152,8 @@ export const signUp =
                 })
             );
         } catch (e) {
-            dispatch(
-                usersRequestFailed(
-                    "Ошибка при регистрации, попробуйте войти позже"
-                )
-            );
+            const err = e.response.data.error;
+            dispatch(usersRequestFailed(err.message));
             console.error(e);
         }
     };
@@ -167,18 +166,17 @@ export const signIn =
         try {
             const { data } = await authService.login({ email, password });
             localStorageService.setToken(data);
-            console.log(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
             history.push("/");
         } catch (e) {
             const err = e.response.data.error;
-            if (err.code === 400 && err.message === "EMAIL_EXISTS") {
-                dispatch(authRequestFailed("Email введен неверно"));
-            } else if (err.code === 400 && err.message === "INVALID_PASSWORD") {
-                dispatch(authRequestFailed("Пароль введен неверно"));
+            if (err.code === 400) {
+                const errorMsg = generateAuthError(err.message);
+                dispatch(authRequestFailed(errorMsg));
             } else {
-                console.error(e.response);
+                dispatch(authRequestFailed(err.message));
             }
+            console.error(e.response);
         }
     };
 
@@ -200,13 +198,12 @@ export const updateCurrentUser = (payload) => async (dispatch, getState) => {
 };
 
 export const getUsersState = () => (state) => state.user.entities;
-export const getUsersError = () => (state) => state.user.error;
 export const getUsersLoading = () => (state) => state.user.isLoading;
+export const getAuthErrors = () => (state) => state.user.error;
 export const getUser = (id) => (state) =>
     state.user.entities
         ? state.user.entities.find((item) => item._id === id)
         : null;
-export const getCurrentUserId = () => (state) => state.user.auth.userId;
 export const getCurrentUser = () => (state) => {
     return state.user.entities
         ? state.user.entities.find((u) => u._id === state.user.auth?.userId)

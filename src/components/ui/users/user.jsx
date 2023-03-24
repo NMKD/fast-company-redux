@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, { useState } from "react";
-import { useRouteMatch, useParams, useHistory } from "react-router-dom";
+import { useRouteMatch, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import Edit from "./edit";
 import Card from "./card";
@@ -35,8 +35,6 @@ const User = ({ userId }) => {
     const [form, setForm] = useState({
         ...stateUserCurrent
     });
-
-    const history = useHistory();
 
     const radioOptions = [
         { name: "Male", value: "male" },
@@ -86,7 +84,6 @@ const User = ({ userId }) => {
                 profession: getProfession(form.profession)
             })
         );
-        history.push(`/users/${user._id}`);
     };
 
     const { url } = useRouteMatch();

@@ -1,6 +1,6 @@
 /* eslint-disable semi */
 /* eslint-disable indent */
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import authService from "../service/auth.service";
 import localStorageService from "../service/localstorage.service";
 import userService from "../service/user.service";
@@ -68,7 +68,7 @@ const usersSlice = createSlice({
             state.auth = null;
             state.dataLoaded = false;
         },
-        userUpdatedRequest(state, { payload }) {
+        userUpdatedSuccess(state, { payload }) {
             if (!Array.isArray(state.entities)) {
                 state.entities = [];
             }
@@ -94,7 +94,7 @@ const {
     authRequested,
     authRequestFailed,
     userLoggedOut,
-    userUpdatedRequest,
+    userUpdatedSuccess,
     userCreated
 } = usersSlice.actions;
 
@@ -182,15 +182,19 @@ export const signIn =
         }
     };
 
+const userUpdateRequested = createAction("users/userUpdateRequested");
+const userUpdateFailed = createAction("users/userUpdateFailed");
+
 export const updateCurrentUser = (payload) => async (dispatch, getState) => {
-    dispatch(authRequested());
+    dispatch(userUpdateRequested());
     try {
         const { data } = await userService.update(payload);
-        dispatch(userUpdatedRequest(data.content));
+        dispatch(userUpdatedSuccess(data.content));
+        history.push(`/users/${data.content._id}`);
     } catch (e) {
         console.error(e.response);
-        console.authRequestFailed(
-            "Ошибка при отправлении формы, попробуйте позже"
+        dispatch(
+            userUpdateFailed("Ошибка при обновлении данных попробуйте позже")
         );
     }
 };

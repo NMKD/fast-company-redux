@@ -106,7 +106,7 @@ export const loadUsersList = () => async (dispatch, getState) => {
         const { data } = await userService.fetchAll();
         dispatch(usersReceved(data.content));
     } catch (e) {
-        dispatch(usersRequestFailed("Ошибка при загрузки данных - 'users'"));
+        dispatch(usersRequestFailed(e.message));
         console.error(e);
     }
 };
@@ -122,7 +122,7 @@ const createUser = (payload) => async (dispatch, getState) => {
         dispatch(userCreated(data.content));
         history.push("/users");
     } catch (e) {
-        dispatch(authRequestFailed("Ошибка при загрузки данных - 'users'"));
+        dispatch(authRequestFailed(e.message));
         console.error(e);
     }
 };
@@ -191,9 +191,7 @@ export const updateCurrentUser = (payload) => async (dispatch, getState) => {
         history.push(`/users/${data.content._id}`);
     } catch (e) {
         console.error(e.response);
-        dispatch(
-            userUpdateFailed("Ошибка при обновлении данных попробуйте позже")
-        );
+        dispatch(userUpdateFailed(e.message));
     }
 };
 

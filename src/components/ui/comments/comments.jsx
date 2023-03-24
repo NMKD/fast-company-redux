@@ -19,6 +19,7 @@ const Comments = ({ paramId }) => {
             userId: stateUserCurrent._id
         });
     };
+    //
 
     const handleRemoveComment = (id) => {
         onRemoveComment(id);

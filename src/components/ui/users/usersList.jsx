@@ -90,52 +90,50 @@ const UsersList = () => {
     }, [selectedProf]);
 
     if (isLoadingUsers && users === null) {
-        return <span>loading...</span>;
+        return <span>loading......</span>;
     }
 
     return (
         <>
-            {users !== null && (
-                <div className="container pt-4">
-                    <div className="row">
-                        <div className="col col-sm-12 col-lg-2">
-                            <>
-                                <GroupList
-                                    selectedItem={selectedProf}
-                                    items={professions}
-                                    onFilter={handleFilterSelect}
-                                />
-                                <button
-                                    className="btn btn-danger mt-2 mb-2"
-                                    onClick={handleClearFilterSelect}
-                                >
-                                    Очистить
-                                </button>
-                            </>
-                        </div>
-                        <div className="col col-sm-12 col-lg-8">
-                            <SearchStatus length={count} />
-                            <SearchInput
-                                value={searchInput}
-                                onChange={handleChangeSearch}
+            <div className="container pt-4">
+                <div className="row">
+                    <div className="col col-sm-12 col-lg-2">
+                        <>
+                            <GroupList
+                                selectedItem={selectedProf}
+                                items={professions}
+                                onFilter={handleFilterSelect}
                             />
-                            {count > 0 && (
-                                <TableList
-                                    users={usersCrop}
-                                    onToogle={handleToogleBookMark}
-                                    onSort={handleSortTable}
-                                    currentSort={sortBy}
-                                />
-                            )}
-                            <Pagination
-                                itemsCount={count}
-                                {...{ pageSize, currentPage }}
-                                onPageChange={handlePageChange}
+                            <button
+                                className="btn btn-danger mt-2 mb-2"
+                                onClick={handleClearFilterSelect}
+                            >
+                                Очистить
+                            </button>
+                        </>
+                    </div>
+                    <div className="col col-sm-12 col-lg-8">
+                        <SearchStatus length={count} />
+                        <SearchInput
+                            value={searchInput}
+                            onChange={handleChangeSearch}
+                        />
+                        {count > 0 && (
+                            <TableList
+                                users={usersCrop}
+                                onToogle={handleToogleBookMark}
+                                onSort={handleSortTable}
+                                currentSort={sortBy}
                             />
-                        </div>
+                        )}
+                        <Pagination
+                            itemsCount={count}
+                            {...{ pageSize, currentPage }}
+                            onPageChange={handlePageChange}
+                        />
                     </div>
                 </div>
-            )}
+            </div>
         </>
     );
 };

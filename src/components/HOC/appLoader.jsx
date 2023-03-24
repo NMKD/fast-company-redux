@@ -3,16 +3,12 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { loadProfessionsList } from "../../store/profession";
 import { loadQualitiesList } from "../../store/qualities";
-import { getAuthUser, loadUsersList } from "../../store/user";
-import localStorageService from "../../service/localstorage.service";
+import { loadUsersList } from "../../store/user";
 
 const AppLoader = ({ children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (localStorageService.getAccessToken()) {
-            dispatch(getAuthUser(localStorageService.getUserId()));
-        }
         dispatch(loadProfessionsList());
         dispatch(loadQualitiesList());
         dispatch(loadUsersList());

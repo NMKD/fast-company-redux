@@ -5,14 +5,14 @@ import { getDataStatus, getIsLoggedIn, loadUsersList } from "../../store/user";
 
 const UsersLoader = ({ children }) => {
     const dataStatus = useSelector(getDataStatus());
-    const isLogIn = useSelector(getIsLoggedIn());
+    const isLoggedIn = useSelector(getIsLoggedIn());
     const dispatch = useDispatch();
     useEffect(() => {
         if (!dataStatus) {
             dispatch(loadUsersList());
         }
     }, []);
-    if (!isLogIn) return "loading..";
+    if (!isLoggedIn) return "loading.....";
     return children;
 };
 

@@ -44,7 +44,7 @@ const UsersList = () => {
         ? toFilterProfession(users, selectedProf)
         : users;
 
-    const count = filterredUsers.length;
+    const count = filterredUsers?.length;
 
     const sortedUsers = _.orderBy(
         filterredUsers,
@@ -90,7 +90,8 @@ const UsersList = () => {
     }, [selectedProf]);
 
     if (isLoadingUsers && users === null) {
-        return <span>loading......</span>;
+        console.log("loading users");
+        return <h1>loading......</h1>;
     }
 
     return (

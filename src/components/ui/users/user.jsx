@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState } from "react";
 import { useRouteMatch, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -15,6 +16,7 @@ import {
     getUser,
     updateCurrentUser
 } from "../../../store/user";
+import { includesToString } from "../../../utils/getFilterData";
 
 const User = ({ userId }) => {
     const { edit } = useParams();
@@ -23,10 +25,12 @@ const User = ({ userId }) => {
     const stateUserCurrent = useSelector(getCurrentUser());
     const professions = useSelector(getProfessionsState());
     const stateQualities = useSelector(getQualitiesState());
-    const qualitiesList = stateQualities.map((item) => ({
-        label: item.name,
-        value: item._id
-    }));
+    const qualitiesList =
+        stateQualities !== null &&
+        stateQualities.map((item) => ({
+            label: item.name,
+            value: item._id
+        }));
 
     const [form, setForm] = useState({
         ...stateUserCurrent
@@ -41,30 +45,49 @@ const User = ({ userId }) => {
     ];
 
     const getProfession = (name) => {
-        const i = professions.findIndex(
-            (prof) => prof.name.toLowerCase() === name.toLowerCase()
-        );
-        return professions[i];
+        if (stateUserCurrent.profession === name) {
+            return name;
+        }
+        return includesToString(professions, name)[0]._id;
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        dispatch(
-            updateCurrentUser({
-                ...form,
-                qualities:
-                    form.qualities.map((item) => item.value) || form.qualities,
-                profession: getProfession(user.profession) || form.profession
-            })
-        );
-        history.push(`/users/${user._id}`);
-    };
+    // const getQualities = (data) => {
+    //     console.log(data);
+    //     if (data.filter((item) => typeof item === "string")) {
+    //         return data;
+    //     }
+    //     return data.map((item) => item.value);
+    // };
 
     const handleChange = (target) => {
         setForm((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        console.log({
+            ...form,
+            qualities: form.qualities.filter((item) => typeof item === "string")
+                ? form.qualities
+                : form.qualities.map((item) => item.value),
+            profession: getProfession(form.profession)
+        });
+        dispatch(
+            updateCurrentUser({
+                ...form,
+                qualities: form.qualities.filter(
+                    (item) => typeof item === "string"
+                )
+                    ? form.qualities
+                    : form.qualities.map((item) => item.value),
+                profession: getProfession(form.profession)
+            })
+        );
+        history.push(`/users/${user._id}`);
     };
 
     const { url } = useRouteMatch();
@@ -104,11 +127,9 @@ const User = ({ userId }) => {
                                             <h6 className="card-title">
                                                 <span>Qualities</span>
                                             </h6>
-                                            <QualitieList
-                                                qualities={
-                                                    stateUserCurrent.qualities
-                                                }
-                                            />
+                                            {user !== null && (
+                                                <QualitieList user={user} />
+                                            )}
                                         </div>
                                     </div>
                                     <CompletedMeetings

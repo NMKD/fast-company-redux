@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-    getCurrentUser,
-    getUsersLoading,
-    onSignOut
-} from "../../../../store/user";
+import { getCurrentUser, onSignOut } from "../../../../store/user";
 
 const NavProfile = () => {
     const dispatch = useDispatch();
     const stateUserCurrent = useSelector(getCurrentUser());
-    const isLoggedIn = useSelector(getUsersLoading());
-
     const [isOpen, setOpen] = useState(false);
     const toogleMenu = () => {
         setOpen((prevState) => !prevState);
@@ -20,15 +14,11 @@ const NavProfile = () => {
         dispatch(onSignOut());
     };
 
-    if (!isLoggedIn) {
-        return <span>Loading...</span>;
-    }
-
     return (
         <div className="dropdown" onClick={toogleMenu}>
             <div className="btn dropdown-toogle d-flex align-items-center">
                 <div className="me-2">
-                    Пользователь: {stateUserCurrent.name}
+                    Пользователь: {stateUserCurrent?.name}
                 </div>
 
                 <img
@@ -44,7 +34,7 @@ const NavProfile = () => {
             </div>
             <div className={"w-100 dropdown-menu " + (isOpen ? "show" : "")}>
                 <Link
-                    to={`/users/${stateUserCurrent._id}`}
+                    to={`/users/${stateUserCurrent?._id}`}
                     className="p-3 dropdown-item"
                 >
                     Мой профиль

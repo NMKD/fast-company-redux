@@ -72,11 +72,8 @@ const usersSlice = createSlice({
             if (!Array.isArray(state.entities)) {
                 state.entities = [];
             }
-            state.entities.map((user) => ({
-                ...user,
-                ...payload,
-                _id: payload._id === state.auth.userId
-            }));
+            const i = state.entities.findIndex((u) => u._id === payload._id);
+            state.entities[i] = payload;
         },
         userCreated: (state, action) => {
             if (!Array.isArray(state.entities)) {
@@ -166,9 +163,11 @@ export const signIn =
     ({ email, password }) =>
     async (dispatch, getState) => {
         dispatch(authRequested());
+
         try {
             const { data } = await authService.login({ email, password });
             localStorageService.setToken(data);
+            console.log(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
             history.push("/");
         } catch (e) {

@@ -17,7 +17,7 @@ const TableList = ({ users, onToogle, currentSort, onSort }) => {
         },
         qualities: {
             name: "Качества",
-            component: (user) => <QualitieList qualities={user.qualities} />
+            component: (user) => <QualitieList user={user} />
         },
         profession: {
             name: "Профессия",

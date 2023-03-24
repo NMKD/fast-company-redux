@@ -16,12 +16,13 @@ const App = () => {
             <NavsBar />
             <AppLoader>
                 <Switch>
+                    <Route exact path="/" component={Main} />
+                    <Route path="/login/:type" component={Login} />
                     <ProtectedRoute
                         path="/users/:id?/:edit?"
                         component={Users}
                     />
-                    <Route path="/login/:type" component={Login} />
-                    <Route exact path="/" component={Main} />
+
                     <Redirect to="/" />
                 </Switch>
                 <ToastContainer />

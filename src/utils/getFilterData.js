@@ -1,6 +1,6 @@
 export function includesToString(data, value) {
-    return data.filter((user) =>
-        user.name.toLowerCase().includes(value.toLowerCase())
+    return data.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase())
     );
 }
 

@@ -1,45 +1,42 @@
 import React from "react";
-import Qualitie from "./qualitie";
-import PropTypes from "prop-types";
-// import { useQualitiesContext } from "../../../../hooks/useQualities";
-import { useSelector } from "react-redux";
-import { getLoading, getQualitiesState } from "../../../../store/qualities";
 
-const QualitieList = ({ qualities }) => {
-    const stateQualities = useSelector(getQualitiesState());
-    const isLoading = useSelector(getLoading());
-    const getQualities = (q) => {
-        const arrayQualities = [];
-        q.forEach((id) => {
-            stateQualities.forEach((item) => {
-                if (item._id === id) {
-                    arrayQualities.push(item);
-                }
-            });
-        });
-        return arrayQualities;
+import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { getQualitiesState } from "../../../../store/qualities";
+
+const QualitieList = ({ user }) => {
+    const qualitiesState = useSelector(getQualitiesState());
+
+    const getNewQualitiesOfUser = () => {
+        const arr = [];
+        if (qualitiesState !== null) {
+            user.qualities.forEach((id) =>
+                qualitiesState.forEach((q) => q._id === id && arr.push(q))
+            );
+        }
+
+        return arr;
     };
-    const data = getQualities(qualities);
+
+    const qualitiesOfUser = user !== null && getNewQualitiesOfUser();
 
     return (
         <>
-            {!isLoading ? (
-                <p className="card-text">
-                    {data &&
-                        data.map((q) => (
-                            <Qualitie key={q.color + q.name} {...q} />
-                        ))}
-                </p>
-            ) : (
-                <span>Loading...</span>
-            )}
+            <p className="card-text">
+                {qualitiesOfUser.map((q) => (
+                    <span key={q._id} className={`m-2 badge bg-${q.color}`}>
+                        {q.name}
+                    </span>
+                ))}
+            </p>
         </>
     );
 };
 QualitieList.propTypes = {
-    qualities: PropTypes.oneOfType([
+    user: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
-        PropTypes.arrayOf(PropTypes.string)
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.object
     ])
 };
 

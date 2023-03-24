@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from "react";
 import PropTypes from "prop-types";
 import Avatar from "../users/avatar";
@@ -9,7 +10,7 @@ const Comment = ({
     content,
     _id: id,
     userId,
-    created_at: created,
+    create_at: created,
     onRemove
 }) => {
     const user = useSelector(getUser(userId));
@@ -25,12 +26,12 @@ const Comment = ({
                             <div className="mb-4">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <p className="mb-1 ">
-                                        {user.name}
+                                        {user?.name}
                                         <span className="small mx-2">
                                             {formstDate(created)}
                                         </span>
                                     </p>
-                                    {stateUserCurrent._id === userId && (
+                                    {stateUserCurrent?._id === userId && (
                                         <button
                                             className="btn btn-sm text-primary d-flex align-items-center"
                                             onClick={() => onRemove(id)}
@@ -53,8 +54,7 @@ Comment.propTypes = {
     content: PropTypes.string,
     _id: PropTypes.string,
     userId: PropTypes.string,
-    // edited_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    created_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    create_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     onRemove: PropTypes.func
 };
 

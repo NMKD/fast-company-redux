@@ -1,31 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import AddCommentForm from "./addCommentForm";
 import CommentList from "./commentList";
 import { orderBy } from "lodash";
-import { useCommentsContext } from "../../../hooks/useComment";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from "../../../store/user";
+import {
+    getCommentsIsLoading,
+    getCommentsState,
+    loadCommentsList,
+    createComment,
+    removeComment
+} from "../../../store/comments";
 
 const Comments = ({ paramId }) => {
+    const dispatch = useDispatch();
     const stateUserCurrent = useSelector(getCurrentUser());
-    const { stateComments, onSubmitForm, onRemoveComment } =
-        useCommentsContext();
+    const stateComments = useSelector(getCommentsState());
+    const isLoading = useSelector(getCommentsIsLoading());
 
-    const handlSubmit = async (data) => {
-        await onSubmitForm({
-            ...data,
-            pageId: paramId,
-            userId: stateUserCurrent._id
-        });
+    const handlSubmit = (data) => {
+        dispatch(
+            createComment({
+                ...data,
+                pageId: paramId,
+                userId: stateUserCurrent._id
+            })
+        );
     };
-    //
+
+    useEffect(() => {
+        dispatch(loadCommentsList(paramId));
+    }, [paramId]);
 
     const handleRemoveComment = (id) => {
-        onRemoveComment(id);
+        dispatch(removeComment(id));
     };
 
-    const sortedComments = orderBy(stateComments, ["created-by"], ["desc"]);
+    const sortedComments =
+        stateComments !== null &&
+        orderBy(stateComments, ["created-by"], ["desc"]);
 
     return (
         <>
@@ -39,10 +53,14 @@ const Comments = ({ paramId }) => {
                 <div className="card-body ">
                     <h2>Comments</h2>
                     <hr />
-                    <CommentList
-                        comments={sortedComments}
-                        onRemove={handleRemoveComment}
-                    />
+                    {!isLoading ? (
+                        <CommentList
+                            comments={sortedComments}
+                            onRemove={handleRemoveComment}
+                        />
+                    ) : (
+                        <p>Loading...</p>
+                    )}
                 </div>
             </div>
         </>

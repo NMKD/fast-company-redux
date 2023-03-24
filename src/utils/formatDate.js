@@ -15,7 +15,7 @@ export function formstDate(data) {
                 }
                 return "30 минут назад";
             }
-            return `${date.getHours()} : ${date.getMinutes()}`;
+            return `в ${date.getHours()} : ${date.getMinutes()}`;
         }
         return `${date.getDate()} ${date.toLocaleString("default", {
             month: "long",

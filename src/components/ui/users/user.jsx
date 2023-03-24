@@ -49,13 +49,13 @@ const User = ({ userId }) => {
         return includesToString(professions, name)[0]._id;
     };
 
-    const getQualities = (data) => {
-        if (data.find((item) => typeof item === "string")) {
-            return data;
-        } else {
-            return data.map((item) => item.value);
-        }
-    };
+    // const getQualities = (data) => {
+    //     if (data.find((item) => typeof item === "string")) {
+    //         return data;
+    //     } else {
+    //         return data.map((item) => item.value);
+    //     }
+    // };
 
     const handleChange = (target) => {
         setForm((prevState) => ({
@@ -65,11 +65,14 @@ const User = ({ userId }) => {
     };
 
     const handleSubmit = async (e) => {
+        const data = form.qualities;
         e.preventDefault();
         dispatch(
             updateCurrentUser({
                 ...form,
-                qualities: getQualities(form.qualities),
+                qualities: data.find((item) => typeof item === "string")
+                    ? data
+                    : data.map((item) => item.value),
                 profession: getProfession(form.profession)
             })
         );

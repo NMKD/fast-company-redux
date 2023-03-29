@@ -8,13 +8,15 @@ const UsersLoader = ({ children }) => {
     const isLoggedIn = useSelector(getIsLoggedIn());
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         if (!dataLoaded) {
             console.log(dataLoaded);
             dispatch(loadUsersList());
         }
     }, []);
-    if (!isLoggedIn) return "loading.....";
+
+    if (!isLoggedIn) return "waiting.....";
     return children;
 };
 

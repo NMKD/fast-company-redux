@@ -9,6 +9,7 @@ const GroupList = ({
     contentProperty,
     onFilter
 }) => {
+    if (items === null) return;
     return (
         <>
             <ul className="list-group">

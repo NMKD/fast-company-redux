@@ -38,6 +38,15 @@ const UsersList = () => {
     // search users
     const [searchInput, setSearchInput] = useState("");
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf]);
+
+    if (isLoadingUsers || users === null) {
+        console.log("loading users");
+        return <h1>loading......</h1>;
+    }
+
     const filterredUsers = searchInput
         ? includesToString(users, searchInput)
         : selectedProf
@@ -84,15 +93,6 @@ const UsersList = () => {
     const handleToogleBookMark = (id) => {
         dispatch(onToogleBookmark(id));
     };
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedProf]);
-
-    if (isLoadingUsers && users === null) {
-        console.log("loading users");
-        return <h1>loading......</h1>;
-    }
 
     return (
         <>

@@ -50,6 +50,7 @@ export const loadProfessionsList = () => async (dispatch, getState) => {
 };
 
 export const getProfession = (id) => (state) =>
+    state.profession.entities !== null &&
     state.profession.entities.find((item) => item._id === id);
 
 export const getProfessionsState = () => (state) => state.profession.entities;

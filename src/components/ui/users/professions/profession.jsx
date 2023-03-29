@@ -5,11 +5,9 @@ import { getProfession } from "../../../../store/profession";
 
 const Profession = ({ id }) => {
     const data = useSelector(getProfession(id));
-
     if (!id) {
         return <span>loading... </span>;
     }
-
     return <p>{data.name}</p>;
 };
 
